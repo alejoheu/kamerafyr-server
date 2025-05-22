@@ -28,7 +28,7 @@ jobs:
                   file: Dockerfile
                   push: true
                   tags: ghcr.io/alejoheu/kamerafyr-server:latest
-                  platforms: linux/amd64,linux/arm64
+                  platforms: linux/amd64
                   cache-from: type=local,src=/tmp/.buildx-cache
                   cache-to: type=local,dest=/tmp/.buildx-cache
             
