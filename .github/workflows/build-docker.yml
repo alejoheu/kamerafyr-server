@@ -2,7 +2,7 @@ name: Build Kamerafyr's Docker image
 
 on:
     push:
-        branches: ["master"]
+        branches: ["main"]
 
 jobs:
     build-docker:
