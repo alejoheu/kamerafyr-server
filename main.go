@@ -32,8 +32,8 @@ func main() {
 	Log := slog.New(slog.NewTextHandler(os.Stdout, nil))
 
 	// load env vars
-	if err := os.Getenv("KAMERAFYR_SERVER_NTFY_URL"); err != "" {
-		Log.Error("could not load env var", "error", err)
+	if ntfy_url := os.Getenv("KAMERAFYR_SERVER_NTFY_URL"); ntfy_url == "" {
+		Log.Error("could not load env var", "error", ntfy_url)
 		return
 	}
 
