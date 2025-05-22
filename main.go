@@ -9,7 +9,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
 
@@ -32,13 +31,9 @@ var Log *slog.Logger
 func main() {
 	Log := slog.New(slog.NewTextHandler(os.Stdout, nil))
 
-	// load config
-	viper.SetConfigName("config")
-	viper.SetConfigType("toml")
-	viper.AddConfigPath(".")
-	err := viper.ReadInConfig()
-	if err != nil {
-		Log.Error("could not read config", "error", err)
+	// load env vars
+	if err := os.Getenv("KAMERAFYR_SERVER_NTFY_URL"); err != "" {
+		Log.Error("could not load env var", "error", err)
 		return
 	}
 
@@ -151,7 +146,8 @@ func main() {
 
 func FinePerson(plate string, kmh float64) {
 	// Send notification to my ntfy instance
-	req, err := http.NewRequest("POST", viper.GetString("ntfy.url"), strings.NewReader("License plate "+plate+" is going "+strconv.FormatFloat(kmh, 'f', 2, 64)+" km/h. Please send them a fine!"))
+	url := os.Getenv("KAMERAFYR_SERVER_NTFY_URL")
+	req, err := http.NewRequest("POST", url, strings.NewReader("License plate "+plate+" is going "+strconv.FormatFloat(kmh, 'f', 2, 64)+" km/h. Please send them a fine!"))
 	if err != nil {
 		Log.Error("couldn't send notification to ntfy", "error", err)
 		return
